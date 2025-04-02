@@ -24,7 +24,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return firestore.collection("employees"); // Reference to Firestore "employees" collection
     }
 
-    // 🔹 Create Employee (Firestore generates ID)
     @Override
     public EmployeeResponse createEmployee(EmployeeCreateRequest request) {
         Employee employee = new Employee();
@@ -33,13 +32,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(request.getDepartment());
 
         try {
-            DocumentReference docRef = getEmployeeCollection().add(employee).get(); // Firestore auto-generates ID
-            employee.setId(docRef.getId()); // Retrieve generated ID
+            // Firestore generates a document with an auto-generated ID
+            DocumentReference docRef = getEmployeeCollection().document();
+            employee.setId(docRef.getId()); // Set the generated ID before saving
+
+            // Save employee with the assigned ID
+            docRef.set(employee).get();
+
             return mapToResponse(employee);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Error creating employee: " + e.getMessage());
         }
     }
+
 
     // 🔹 Get Employee by ID
     @Override
