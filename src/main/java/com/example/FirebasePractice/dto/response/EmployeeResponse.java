@@ -2,12 +2,11 @@ package com.example.FirebasePractice.dto.response;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeResponse {
-    private Long id;
+    private String id;
     private String name;
     private String email;
     private String department;
